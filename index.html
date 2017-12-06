@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Dialog Semiconductor Codeless</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+		@import 'ui/css/app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ble/ble.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+	
+		<img class="logotype" src="ui/images/logo.png" alt="Evothings" />
+
+		<button id="menu-button" tabindex="0" onclick="this.focus()">
+			<img src="ui/images/menu.svg" />
+		</button>
+
+		<menu>
+			<menuitem>
+				<a href="#">Home</a>
+			</menuitem>
+
+			<menuitem>
+				<a href="#about">About</a>
+			</menuitem>
+
+			<menuitem>
+				<a href="#settings">Settings</a>
+			</menuitem>
+		</menu>
+	</header>
+	
+	<div id="scanwindow">
+	
+	<h1 align='middle'>CodeLess</h1>
+	
+	<button onclick="app.onStartScanButton()" class="blue small middle">
+		SCAN
+	</button>
+
+	<p align='middle' id="scan-status">Not Connected</p>	
+			
+	<ul id="found-devices" class="dynamic"></ul>
+	
+    </div>
+
+	<section id='connected'>
+		<div id="peerdevice"><h1>Connected to:</h1></div> 
+			
+		    <p>
+				Command: 
+			</p>
+			<input type="text" id="cmd_to_send" value="ATrI" align="center"/>
+			<button onclick="app.toggle()" class="green small wide">
+				Transmit
+			</button>
+
+			<button onclick="app.atri()" class="green small wide">
+				Remote Identify
+			</button>
+
+			<input type="text" id="mesaje_to_send" value="Hello Spora" align="center"/>
+			<button onclick="app.atprint()" class="green small wide">
+				Remote Print
+			</button>
+			<p>
+			<br/>Response:<br/>
+			</p>
+			<textarea id="response_text" rows="6" align="left">Response</textarea>
+			
+			<a href="#">
+			
+			<br/><br/><br/>
+			<button onclick="app.onDisconnectButton()" class="red small wide">
+				Disconnect
+			</button>
+
+		</a>
+	
+	</section>
+
+	<section id='about'>
+
+		<h1>CodeLess</h1>
+		<br/>
+
+		<p>This app demonstrates the functionality of the DA1458x CodeLess firmware.</p>
+		<br/>
+		<p>The smartphone, or tablet, will operate as a CodeLess central, and will provide an interface to transmit AT commands and receive responses from a DA1458x running the CodeLess firmware</p>
+		<br/>
+		<p>Simply load the CodeLess firmware onto your device and use this app to scan, connect and communicate with it.</p>
+		<br/>
+		<p>Enjoy!</p>	
+		<br/>
+	</section>
+
+	<section id='settings'>
+
+		<p align='middle' id="scan-time">Bluetooth scan time: 10 seconds</p>
+
+		<input type="range" id="slider" min="2" max="50" step="1" onchange="app.setScanTime(value)" value="10">
+
+	</section>
+
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "spora-codeless_ble",
+  "version": "1.0.0",
+  "title": "Spora Codeless",
+  "description": "App supporting the DA1458x CodeLess implementation from Dialog Semiconductor.",
+  "tags": [
+    {
+      "label": "dialog",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
+  "index-file": "index.html",
+  "app-dir": "app",
+  "uuid": "ab3c1495-3ca6-4540-9a72-8ecbbab0286c",
+  "icon": "app-icon.png",
+  "doc-url": "http://evothings.com/2.2/doc/examples/dialog-codeless.html",
+  "long-description": "App supporting the DA1458x CodeLess implementation from Dialog Semiconductor.",
+  "cordova-id": "com.evothings.examples.sporacodeless",
+  "author-name": "Evothings",
+  "author-email": "build@evothings.com",
+  "author-url": "https://evothings.com"
+}
