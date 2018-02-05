@@ -233,10 +233,33 @@ var app = (function()
 			{
 				console.log('Read RX data');
 				// success
-				var textbox = document.getElementById('response_text');
-				textbox.value = evothings.ble.fromUtf8(data);
-				textbox.value = textbox.value.replace("ATr+PRINT=", "");
-				textbox.style.backgroundColor = "#F5FFFA";
+
+//				var textbox = document.getElementById('response_text');
+                
+//				textbox.value = evothings.ble.fromUtf8(data);
+//    			textbox.value = textbox.value.replace("ATr+PRINT=", "");
+//    			textbox.value = textbox.value.replace("\\EOSM", "");
+//
+                var rxdata = evothings.ble.fromUtf8(data);
+                rxdata = rxdata.replace("ATr+PRINT=", "");
+    			rxdata = rxdata.replace("\\EOSM", "");
+
+                var json = jQuery.parseJSON(rxdata);
+
+//                alert(String(json.x));
+                
+                jQuery("#Time").text(String(json.t));
+                jQuery("#AccX").text(String(json.x));
+                jQuery("#AccY").text(String(json.y));
+                jQuery("#AccZ").text(String(json.z));
+                jQuery("#MagX").text(String(json.u));
+                jQuery("#MagY").text(String(json.v));
+                jQuery("#MagZ").text(String(json.w));
+                jQuery("#Temp").text(String(json.c));
+                jQuery("#Button").text(String(json.b));
+                jQuery("#Threshold").text(String(json.h));
+                jQuery("#Name").text(String(json.n));
+
 			},
 			function(error)
 			{

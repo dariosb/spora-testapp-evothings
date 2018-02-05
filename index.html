@@ -22,7 +22,8 @@
 	<script src="cordova.js"></script>
 	<script src="libs/evothings/evothings.js"></script>
 	<script src="libs/evothings/ble/ble.js"></script>
-	<script src="app.js"></script>
+    <script src="libs/jquery.min.js"></script>
+    <script src="app.js"></script>
 
 </head>
 
@@ -87,14 +88,31 @@
 			<button onclick="app.atprint()" class="green small wide">
 				Remote Print
 			</button>
-			<p>
-			<br/>Response:<br/>
-			</p>
+
+<!--
+            <p><br/>Response:<br/></p>
+
 			<textarea id="response_text" rows="6" align="left">Response</textarea>
+-->
 			
+			<p>
+            <br/>Time: <span id="Time"></span> 
+            <br/>AccX: <span id="AccX"></span>
+            <br/>AccY: <span id="AccY"></span> 
+            <br/>AccZ: <span id="AccZ"></span> 
+            <br/>MagX: <span id="MagX"></span>
+            <br/>MagY: <span id="MagY"></span> 
+            <br/>MagZ: <span id="MagZ"></span> 
+            <br/>Temp: <span id="Temp"></span> 
+            <br/>Button: <span id="Button"></span> 
+            <br/>MotThr: <span id="Threshold"></span> 
+            <br/>Name: <span id="Name"></span> 
+			</p>
+
 			<a href="#">
 			
 			<br/><br/><br/>
+
 			<button onclick="app.onDisconnectButton()" class="red small wide">
 				Disconnect
 			</button>
