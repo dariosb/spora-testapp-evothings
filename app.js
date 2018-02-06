@@ -25,6 +25,13 @@ var app = (function()
 
 	var scanTimeout;
 	var scanTime = 20000; // default scan time in ms
+    
+    // MPU9250 configuration constants
+    var MPU9250_ACC_LSB = 2 * 2 / 0xFFFF; // +/-2g in 16bit resolution
+    var MPU9250_MTHR_LSB = 1.020 / 255     // 1020mg in 255bit resolution
+    var MPU9250_MAG_LSB = 4800 * 2 / 0xFFFF; // +/-4800uT in 16 bit resolution
+    var MPU9250_TMP_K = 333.87;            // temp[ºC] = (temp / 333.87) + 21
+    var MPU9250_TMP_OFFSET = 21;
 
 	// Wait for all libraries to have loaded
 	app.initialize = function()
@@ -248,16 +255,38 @@ var app = (function()
 
 //                alert(String(json.x));
                 
+                var temp = (json.c / MPU9250_TMP_K) + MPU9250_TMP_OFFSET;
+                var accx = (json.x * MPU9250_ACC_LSB);
+                var accy = (json.y * MPU9250_ACC_LSB);
+                var accz = (json.z * MPU9250_ACC_LSB);
+                var accmod = Math.sqrt(Math.pow(accx,2)+Math.pow(accy,2)+Math.pow(accz,2))
+
+                var magx = (json.u * MPU9250_MAG_LSB);
+                var magy = (json.v * MPU9250_MAG_LSB);
+                var magz = (json.w * MPU9250_MAG_LSB);
+               
+                var motThr = (json.h * MPU9250_MTHR_LSB);
+
                 jQuery("#Time").text(String(json.t));
-                jQuery("#AccX").text(String(json.x));
-                jQuery("#AccY").text(String(json.y));
-                jQuery("#AccZ").text(String(json.z));
-                jQuery("#MagX").text(String(json.u));
-                jQuery("#MagY").text(String(json.v));
-                jQuery("#MagZ").text(String(json.w));
-                jQuery("#Temp").text(String(json.c));
-                jQuery("#Button").text(String(json.b));
-                jQuery("#Threshold").text(String(json.h));
+
+                jQuery("#AccX").text(String(accx.toFixed(2)));
+                jQuery("#AccY").text(String(accy.toFixed(2)));
+                jQuery("#AccZ").text(String(accz.toFixed(2)));
+                jQuery("#AccMod").text(String(accmod.toFixed(2)));
+
+                jQuery("#MagX").text(String(magx.toFixed(2)));
+                jQuery("#MagY").text(String(magy.toFixed(2)));
+                jQuery("#MagZ").text(String(magz.toFixed(2)));
+
+                jQuery("#Temp").text(String(temp.toFixed(2)));
+
+                if(json.b == 0)
+                    jQuery("#Button").text("OFF");
+                else
+                    jQuery("#Button").text("ON");
+
+                jQuery("#Threshold").text(String(motThr.toFixed(2)));
+
                 jQuery("#Name").text(String(json.n));
 
 			},
