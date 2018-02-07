@@ -84,7 +84,7 @@
 				Remote Identify
 			</button>
 
-			<input type="text" id="mesaje_to_send" value="Hello Spora" align="center"/>
+			<input type="text" id="message_to_send" value="Hello Spora" align="center"/>
 			<button onclick="app.atprint()" class="green small wide">
 				Remote Print
 			</button>
@@ -140,8 +140,17 @@
 	<section id='settings'>
 
 		<p align='middle' id="scan-time">Bluetooth scan time: 10 seconds</p>
+		<input type="range" id="slider1" min="2" max="50" step="1" onchange="app.setScanTime(value)" value="10">
 
-		<input type="range" id="slider" min="2" max="50" step="1" onchange="app.setScanTime(value)" value="10">
+		<p align='middle' id="MotionThr">Motion Detection Threshold: 1020mg</p>
+        <input type="range" id="slider2" min="0" max="1020" step="4" onchange="app.setMotionThr(value)" value="1020">
+
+		<p align='left' id="User">User Name: </p>
+        <input type="text" id="name" maxlength="20" size="50" onchange="app.setUser(value)">
+
+		<br/>
+		<br/>
+    	<button onclick="app.onStubmitCfg()" class="blue small middle">Submit</button>
 
 	</section>
 

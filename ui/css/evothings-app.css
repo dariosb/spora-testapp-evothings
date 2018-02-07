@@ -653,6 +653,24 @@ input.btn-group.blue:checked + label {
 	background-color: #52afb8;
 }
 
+/*  Color: "Green Hue"
+	Clas name: Green
+    ------------------ */
+.color_greenhue { color: #205721; }
+.bg_green, input.green, button.green, ul.green li, label.green,
+input.green + label {
+	background-color: #205721;
+}
+/* Downpressed button. */
+button.blue:active, button.blue.pressed,
+/* Input element with adjacent label. */
+input.btn-group:active + label.blue,
+input.btn-group.blue:active + label,
+input.btn-group:checked + label.blue,
+input.btn-group.blue:checked + label {
+	background-color: #52afb8;
+}
+
 /*  Color: "Indigo"
 	Class name: indigo
     ------------------ */

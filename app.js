@@ -25,6 +25,8 @@ var app = (function()
 
 	var scanTimeout;
 	var scanTime = 20000; // default scan time in ms
+    var cfg_motThr = 1020; // default Motion Thr
+    var cfg_user = "Spora User";
     
     // MPU9250 configuration constants
     var MPU9250_ACC_LSB = 16 * 2 / 0xFFFF; // +/-16g in 16bit resolution
@@ -360,6 +362,29 @@ var app = (function()
 
 	   	var el = document.getElementById('scan-time');
 	   	el.innerHTML = 'Bluetooth scan time: ' + value + ' seconds';
+	};
+
+	app.setMotionThr = function(value)
+	{
+		cfg_motThr = value / MPU9250_MTHR_LSB;
+
+	   	var el = document.getElementById('MotionThr');
+	   	el.innerHTML = 'Motion Detection Threshold: ' + value + ' mg';
+	};
+    
+	app.setUser = function(value)
+	{
+		cfg_user = value;
+
+	   	var el = document.getElementById('User');
+	   	el.innerHTML = 'User Name: ' + value;
+	};
+    
+	app.onStubmitCfg = function(value)
+	{
+		// Convert string to Uint8Array
+		str = "ATr+PRINT=""+RCV=" cfg_motThr "," cfg_user "\\EOSM";
+		xmitToPeer(str);
 	};
 
 	return app;
