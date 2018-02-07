@@ -27,7 +27,7 @@ var app = (function()
 	var scanTime = 20000; // default scan time in ms
     
     // MPU9250 configuration constants
-    var MPU9250_ACC_LSB = 2 * 2 / 0xFFFF; // +/-2g in 16bit resolution
+    var MPU9250_ACC_LSB = 16 * 2 / 0xFFFF; // +/-16g in 16bit resolution
     var MPU9250_MTHR_LSB = 1.020 / 255     // 1020mg in 255bit resolution
     var MPU9250_MAG_LSB = 4800 * 2 / 0xFFFF; // +/-4800uT in 16 bit resolution
     var MPU9250_TMP_K = 333.87;            // temp[ºC] = (temp / 333.87) + 21
