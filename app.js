@@ -30,7 +30,7 @@ var app = (function()
     
     // MPU9250 configuration constants
     var MPU9250_ACC_LSB = 16 * 2 / 0xFFFF; // +/-16g in 16bit resolution
-    var MPU9250_MTHR_LSB = 1.020 / 255     // 1020mg in 255bit resolution
+    var MPU9250_MTHR_LSB = 1020 / 255     // 1020mg in 255bit resolution
     var MPU9250_MAG_LSB = 4800 * 2 / 0xFFFF; // +/-4800uT in 16 bit resolution
     var MPU9250_TMP_K = 333.87;            // temp[ºC] = (temp / 333.87) + 21
     var MPU9250_TMP_OFFSET = 21;
@@ -287,7 +287,7 @@ var app = (function()
                 else
                     jQuery("#Button").text("ON");
 
-                jQuery("#Threshold").text(String(motThr.toFixed(2)));
+                jQuery("#Threshold").text(String(motThr.toFixed(0)));
 
                 jQuery("#Name").text(String(json.n));
 
@@ -351,7 +351,7 @@ var app = (function()
 	app.atprint = function() 
 	{
 		// Convert string to Uint8Array
-		str = "ATr+PRINT=" + document.getElementById('mesaje_to_send').value;
+		str = "ATr+PRINT=" + document.getElementById('message_to_send').value;
 		xmitToPeer(str);
 	};
 
@@ -366,6 +366,7 @@ var app = (function()
 
 	app.setMotionThr = function(value)
 	{
+        console.log(value);
 		cfg_motThr = value / MPU9250_MTHR_LSB;
 
 	   	var el = document.getElementById('MotionThr');
@@ -380,13 +381,22 @@ var app = (function()
 	   	el.innerHTML = 'User Name: ' + value;
 	};
     
-	app.onStubmitCfg = function(value)
+	app.onSubmitCfg = function()
 	{
-		// Convert string to Uint8Array
-		str = "ATr+PRINT=""+RCV=" cfg_motThr "," cfg_user "\\EOSM";
+        var Jcfg = new Object();
+
+        Jcfg.h = cfg_motThr;
+        Jcfg.n = cfg_user;
+
+		str = "ATr+PRINT=" + "+RCV=" + JSON.stringify(Jcfg) + "\\EOSM\r";
+        str = str.replace(",",";");
+
+        console.log(cfg_motThr);
+        console.log(str);
+//		str = "ATr+PRINT=" + "+RCV=" + String(cfg_motThr) + "-" + String(cfg_user) + "\\EOSM\r";
 		xmitToPeer(str);
 	};
-
+    
 	return app;
 
 })();
