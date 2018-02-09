@@ -72,29 +72,6 @@
 	<section id='connected'>
 		<div id="peerdevice"><h1>Connected to:</h1></div> 
 			
-		    <p>
-				Command: 
-			</p>
-			<input type="text" id="cmd_to_send" value="ATrI" align="center"/>
-			<button onclick="app.toggle()" class="green small wide">
-				Transmit
-			</button>
-
-			<button onclick="app.atri()" class="green small wide">
-				Remote Identify
-			</button>
-
-			<input type="text" id="message_to_send" value="Hello Spora" align="center"/>
-			<button onclick="app.atprint()" class="green small wide">
-				Remote Print
-			</button>
-
-<!--
-            <p><br/>Response:<br/></p>
-
-			<textarea id="response_text" rows="6" align="left">Response</textarea>
--->
-			
 			<p>
             <br/>Time[sec]: <span id="Time"></span> 
             <br/>AccX[g]: <span id="AccX"></span>
@@ -112,7 +89,7 @@
 
 			<a href="#">
 			
-			<br/><br/><br/>
+			<br/>
 
 			<button onclick="app.onDisconnectButton()" class="red small wide">
 				Disconnect
