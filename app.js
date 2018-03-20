@@ -35,6 +35,7 @@ var app = (function()
     var MPU9250_TMP_K = 333.87;            // temp[ºC] = (temp / 333.87) + 21
     var MPU9250_TMP_OFFSET = 21;
 
+
 	// Wait for all libraries to have loaded
 	app.initialize = function()
 	{
@@ -212,6 +213,45 @@ var app = (function()
 		};
 	};
 
+  	function parseSporaDataPaket(json)
+    {
+        //alert(String(json.x));
+                
+        var temp = (json.c / MPU9250_TMP_K) + MPU9250_TMP_OFFSET;
+        var accx = (json.x * MPU9250_ACC_LSB);
+        var accy = (json.y * MPU9250_ACC_LSB);
+        var accz = (json.z * MPU9250_ACC_LSB);
+        var accmod = Math.sqrt(Math.pow(accx,2)+Math.pow(accy,2)+Math.pow(accz,2))
+
+        var magx = (json.u * MPU9250_MAG_LSB);
+        var magy = (json.v * MPU9250_MAG_LSB);
+        var magz = (json.w * MPU9250_MAG_LSB);
+       
+        var motThr = (json.h * MPU9250_MTHR_LSB);
+
+        jQuery("#Time").text(String(json.t));
+
+        jQuery("#AccX").text(String(accx.toFixed(2)));
+        jQuery("#AccY").text(String(accy.toFixed(2)));
+        jQuery("#AccZ").text(String(accz.toFixed(2)));
+        jQuery("#AccMod").text(String(accmod.toFixed(2)));
+
+        jQuery("#MagX").text(String(magx.toFixed(2)));
+        jQuery("#MagY").text(String(magy.toFixed(2)));
+        jQuery("#MagZ").text(String(magz.toFixed(2)));
+
+        jQuery("#Temp").text(String(temp.toFixed(2)));
+
+        if(json.b == 0)
+            jQuery("#Button").text("OFF");
+        else
+            jQuery("#Button").text("ON");
+
+        jQuery("#Threshold").text(String(motThr.toFixed(0)));
+
+        jQuery("#Name").text(String(json.n));
+    };
+
 	function enableNotification(device)
 	{	
 		var service = evothings.ble.getService(device, SERVICE_UUID);
@@ -255,42 +295,7 @@ var app = (function()
 
                 var json = jQuery.parseJSON(rxdata);
 
-//                alert(String(json.x));
-                
-                var temp = (json.c / MPU9250_TMP_K) + MPU9250_TMP_OFFSET;
-                var accx = (json.x * MPU9250_ACC_LSB);
-                var accy = (json.y * MPU9250_ACC_LSB);
-                var accz = (json.z * MPU9250_ACC_LSB);
-                var accmod = Math.sqrt(Math.pow(accx,2)+Math.pow(accy,2)+Math.pow(accz,2))
-
-                var magx = (json.u * MPU9250_MAG_LSB);
-                var magy = (json.v * MPU9250_MAG_LSB);
-                var magz = (json.w * MPU9250_MAG_LSB);
-               
-                var motThr = (json.h * MPU9250_MTHR_LSB);
-
-                jQuery("#Time").text(String(json.t));
-
-                jQuery("#AccX").text(String(accx.toFixed(2)));
-                jQuery("#AccY").text(String(accy.toFixed(2)));
-                jQuery("#AccZ").text(String(accz.toFixed(2)));
-                jQuery("#AccMod").text(String(accmod.toFixed(2)));
-
-                jQuery("#MagX").text(String(magx.toFixed(2)));
-                jQuery("#MagY").text(String(magy.toFixed(2)));
-                jQuery("#MagZ").text(String(magz.toFixed(2)));
-
-                jQuery("#Temp").text(String(temp.toFixed(2)));
-
-                if(json.b == 0)
-                    jQuery("#Button").text("OFF");
-                else
-                    jQuery("#Button").text("ON");
-
-                jQuery("#Threshold").text(String(motThr.toFixed(0)));
-
-                jQuery("#Name").text(String(json.n));
-
+                parseSporaDataPaket(json);
 			},
 			function(error)
 			{
@@ -391,10 +396,12 @@ var app = (function()
 		str = "ATr+PRINT=" + "+RCV=" + JSON.stringify(Jcfg) + "\\EOSM\r";
         str = str.replace(",",";");
 
+        document.getElementById('waitwheel').style.display = 'block';
+
         console.log(cfg_motThr);
         console.log(str);
-//		str = "ATr+PRINT=" + "+RCV=" + String(cfg_motThr) + "-" + String(cfg_user) + "\\EOSM\r";
 		xmitToPeer(str);
+
 	};
     
 	return app;
