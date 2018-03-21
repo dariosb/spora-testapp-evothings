@@ -23,6 +23,8 @@ var app = (function()
 	var FLOW_CTRL = 'e2048b39-d4f9-4a45-9f25-1856c10d5639';
 	var CHAR_RESP = '3bb535aa-50b2-4fbe-aa09-6b06dc59a404';
 
+    var SporaCmdEnum = { SporaAck: 0, SporaData: 1, SporaCfg: 2 };
+
 	var scanTimeout;
 	var scanTime = 20000; // default scan time in ms
     var cfg_motThr = 1020; // default Motion Thr
@@ -294,8 +296,22 @@ var app = (function()
     			rxdata = rxdata.replace("\\EOSM", "");
 
                 var json = jQuery.parseJSON(rxdata);
+   
+                console.log('rcv ' + json.cmd);
+                switch(json.cmd)
+                {
+                    case SporaCmdEnum.SporaData:
+                        parseSporaDataPaket(json);
+                        break;
 
-                parseSporaDataPaket(json);
+                    case SporaCmdEnum.SporaAck:
+            			window.location = '#connected';
+                        document.getElementById('waitwheel').style.display = 'none';
+                        break;
+
+                    default:
+                        break;
+                }
 			},
 			function(error)
 			{
@@ -390,18 +406,18 @@ var app = (function()
 	{
         var Jcfg = new Object();
 
+        Jcfg.cmd = SporaCmdEnum.SporaCfg;
         Jcfg.h = cfg_motThr;
         Jcfg.n = cfg_user;
 
 		str = "ATr+PRINT=" + "+RCV=" + JSON.stringify(Jcfg) + "\\EOSM\r";
-        str = str.replace(",",";");
+        str = str.replace(new RegExp(",", 'g') ,";");
 
         document.getElementById('waitwheel').style.display = 'block';
 
         console.log(cfg_motThr);
         console.log(str);
 		xmitToPeer(str);
-
 	};
     
 	return app;
