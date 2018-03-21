@@ -23,7 +23,8 @@ var app = (function()
 	var FLOW_CTRL = 'e2048b39-d4f9-4a45-9f25-1856c10d5639';
 	var CHAR_RESP = '3bb535aa-50b2-4fbe-aa09-6b06dc59a404';
 
-    var SporaCmdEnum = { SporaAck: 0, SporaData: 1, SporaCfg: 2 };
+    var SporaCmdEnum = { SporaAck: 0, SporaData: 1, 
+                         SporaConfig: 2, SporaGetConfig: 3 };
 
 	var scanTimeout;
 	var scanTime = 20000; // default scan time in ms
@@ -103,6 +104,19 @@ var app = (function()
 		); 
 	};
 
+	// Called when Settings button is pressed.
+	app.onSettingsButton = function()
+	{
+        window.location = '#settings';
+        document.getElementById('waitwheel').style.display = 'block';
+
+        var Jreq = new Object();
+
+        Jreq.cmd = SporaCmdEnum.SporaGetConfig;
+
+        sendToSpora(Jreq);
+	};
+    
 	// Called when Disconnect button is pressed.
 	app.onDisconnectButton = function()
 	{
@@ -309,6 +323,20 @@ var app = (function()
                         document.getElementById('waitwheel').style.display = 'none';
                         break;
 
+                    case SporaCmdEnum.SporaConfig:
+            			window.location = '#settings';
+                        document.getElementById('waitwheel').style.display = 'none';
+                        cfg_motThr = json.h;
+                        cfg_user = json.n;
+	   	                
+                        document.getElementById("slider2").value = cfg_motThr * MPU9250_MTHR_LSB;
+                        app.setMotionThr(cfg_motThr * MPU9250_MTHR_LSB);
+
+                        document.getElementById("name").value = cfg_user;
+                        app.setUser(cfg_user);
+
+                        break;
+
                     default:
                         break;
                 }
@@ -352,29 +380,17 @@ var app = (function()
 		);
 	};
 	
-	// Called when Toggle button is pressed
-	app.toggle = function() 
-	{
-		// Convert string to Uint8Array
-		str = document.getElementById('cmd_to_send').value;
-		xmitToPeer(str);
-	};
+    function sendToSpora(json)
+    {
+        var str;
 
-	// Called when Atri button is pressed
-	app.atri = function() 
-	{
-		// Convert string to Uint8Array
-		str = "ATrI"
+		str = "ATr+PRINT=" + "+RCV=" + JSON.stringify(json) + "\\EOSM\r";
+        str = str.replace(new RegExp(",", 'g') ,";");
+
+        console.log(cfg_motThr);
+        console.log(str);
 		xmitToPeer(str);
-	};
-	
-	// Called when Atri button is pressed
-	app.atprint = function() 
-	{
-		// Convert string to Uint8Array
-		str = "ATr+PRINT=" + document.getElementById('message_to_send').value;
-		xmitToPeer(str);
-	};
+    };
 
 	// Called when the Scan time slider is selected
 	app.setScanTime = function(value)
@@ -406,18 +422,13 @@ var app = (function()
 	{
         var Jcfg = new Object();
 
-        Jcfg.cmd = SporaCmdEnum.SporaCfg;
+        document.getElementById('waitwheel').style.display = 'block';
+
+        Jcfg.cmd = SporaCmdEnum.SporaConfig;
         Jcfg.h = cfg_motThr;
         Jcfg.n = cfg_user;
 
-		str = "ATr+PRINT=" + "+RCV=" + JSON.stringify(Jcfg) + "\\EOSM\r";
-        str = str.replace(new RegExp(",", 'g') ,";");
-
-        document.getElementById('waitwheel').style.display = 'block';
-
-        console.log(cfg_motThr);
-        console.log(str);
-		xmitToPeer(str);
+        sendToSpora(Jcfg);
 	};
     
 	return app;
