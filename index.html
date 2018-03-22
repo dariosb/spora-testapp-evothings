@@ -48,10 +48,6 @@
 			<menuitem>
 				<a href="#about">About</a>
 			</menuitem>
-
-			<menuitem>
-				<a href="#settings">Settings</a>
-			</menuitem>
 		</menu>
 	</header>
 	
@@ -70,10 +66,12 @@
     </div>
 
 	<section id='connected'>
-		<div id="peerdevice"><h1>Connected to:</h1></div> 
-			
+		<div id="peerdevice"></div> 
+			<button onclick="app.onSettingsButton()" class="green small wide">
+				Settings
+			</button>
 			<p>
-            <br/>Time[sec]: <span id="Time"></span> 
+            Time[sec]: <span id="Time"></span> 
             <br/>AccX[g]: <span id="AccX"></span>
             <br/>AccY[g]: <span id="AccY"></span> 
             <br/>AccZ[g]: <span id="AccZ"></span> 
@@ -87,8 +85,8 @@
             <br/>Name: <span id="Name"></span> 
 			</p>
 
-			<button onclick="app.onSettingsButton()" class="blue small wide">
-				Settings
+			<button onclick="app.onUpdateButton()" class="blue small wide">
+				Update
 			</button>
 
 			<button onclick="app.onDisconnectButton()" class="red small wide">
@@ -132,7 +130,7 @@
 		<br/>
 
         <div id="waitwheel" class="loader"></div>
-
+    	<p align='middle' id="waittext"></p>
         </script>
 
 	</section>

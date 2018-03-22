@@ -23,8 +23,8 @@ var app = (function()
 	var FLOW_CTRL = 'e2048b39-d4f9-4a45-9f25-1856c10d5639';
 	var CHAR_RESP = '3bb535aa-50b2-4fbe-aa09-6b06dc59a404';
 
-    var SporaCmdEnum = { SporaAck: 0, SporaData: 1, 
-                         SporaConfig: 2, SporaGetConfig: 3 };
+    var SporaCmdEnum = { SporaAck: 0, SporaData: 1, SporaGetData: 2, 
+                         SporaConfig: 3, SporaGetConfig: 4 };
 
 	var scanTimeout;
 	var scanTime = 20000; // default scan time in ms
@@ -104,11 +104,21 @@ var app = (function()
 		); 
 	};
 
+	// Called when Update button is pressed.
+	app.onUpdateButton = function()
+	{
+        var Jreq = new Object();
+
+        Jreq.cmd = SporaCmdEnum.SporaGetData;
+
+        sendToSpora(Jreq);
+	};
+    
 	// Called when Settings button is pressed.
 	app.onSettingsButton = function()
 	{
-        window.location = '#settings';
         document.getElementById('waitwheel').style.display = 'block';
+        document.getElementById('waittext').innerHTML = "Reading ...";
 
         var Jreq = new Object();
 
@@ -202,8 +212,8 @@ var app = (function()
 			document.getElementById('scanwindow').style.display = 'none';
 			
 			displayConnectStatus('Connected to: ' + device.name);
-			document.getElementById('peerdevice').innerHTML=
-				'<h1>Connected to: ' + device.name + '</h1>';
+			/*document.getElementById('peerdevice').innerHTML=
+				'<h1>Connected to: ' + device.name + '</h1>';*/
 			// No longer update the list of found devices
 			clearInterval(updateTimer); 
 
@@ -321,11 +331,13 @@ var app = (function()
                     case SporaCmdEnum.SporaAck:
             			window.location = '#connected';
                         document.getElementById('waitwheel').style.display = 'none';
+                        document.getElementById('waittext').innerHTML = " ";
                         break;
 
                     case SporaCmdEnum.SporaConfig:
             			window.location = '#settings';
                         document.getElementById('waitwheel').style.display = 'none';
+                        document.getElementById('waittext').innerHTML = " ";
                         cfg_motThr = json.h;
                         cfg_user = json.n;
 	   	                
@@ -423,6 +435,7 @@ var app = (function()
         var Jcfg = new Object();
 
         document.getElementById('waitwheel').style.display = 'block';
+        document.getElementById('waittext').innerHTML = "Writing ...";
 
         Jcfg.cmd = SporaCmdEnum.SporaConfig;
         Jcfg.h = cfg_motThr;
